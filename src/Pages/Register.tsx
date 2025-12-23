@@ -23,7 +23,7 @@ export default function Register() {
         setLoading(true);
         try {
             const { data } = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/users/register`, user);
-            localStorage.setItem("mid", data.user.membershipId);
+            localStorage.setItem("user", JSON.stringify(data.user));
             router("/");
         } catch (error) {
             const err = error as AxiosError<{ message: string }>;

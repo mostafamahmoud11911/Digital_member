@@ -21,7 +21,6 @@ export default function Verify() {
                 );
 
                 setStatus(data.valid ? "success" : "error");
-                localStorage.removeItem("mid");
             } catch (error) {
                 setStatus("error");
                 const err = error as AxiosError<{ message: string }>;

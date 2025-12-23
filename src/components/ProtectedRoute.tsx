@@ -7,15 +7,15 @@ interface ProtectedRouteProps extends PropsWithChildren {
 
 export default function ProtectedRoute({ children, redirectIfAuth }: ProtectedRouteProps) {
     // check if the user is logged in
-    const mId = localStorage.getItem("mid");
+    const user = JSON.parse(localStorage.getItem("user") as string);
 
     // protected route if redirectIfAuth is true or if the user is logged in
-    if (redirectIfAuth && mId) {
+    if (redirectIfAuth && user) {
         return <Navigate to="/" replace />;
     }
 
     // redirect to register page if redirectIfAuth is false and the user is not logged in
-    if (!redirectIfAuth && !mId) {
+    if (!redirectIfAuth && !user) {
         return <Navigate to="/register" replace />;
     }
 

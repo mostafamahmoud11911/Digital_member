@@ -9,48 +9,82 @@ export default function Dashboard() {
     const navigate = useNavigate()
 
     // get membership id
-    const mid = localStorage.getItem("mid");
+    const user = JSON.parse(localStorage.getItem("user") as string);
 
 
     // generate link to create qr code 
-    const link = mid ? `${import.meta.env.VITE_APP_URL}/#/verify/${mid}` : ""
+    const link = user ? `${import.meta.env.VITE_APP_URL}/#/verify/${user?.membershipId as string}` : ""
 
 
     // check if membership id is valid if not redirect to register after 3 seconds
     useEffect(() => {
         const interval = setInterval(async () => {
             const res = await axios.get(
-                `${import.meta.env.VITE_API_BASE_URL}/api/users/status/${mid}`
+                `${import.meta.env.VITE_API_BASE_URL}/api/users/status/${user.membershipId}`
             );
 
             if (res.data.isUsed) {
-                localStorage.removeItem("mid");
+                localStorage.removeItem("user");
                 navigate("/register");
             }
         }, 3000);
 
         // clear interval
         return () => clearInterval(interval);
-    }, [mid, navigate]);
+    }, [navigate, user.membershipId]);
 
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
             <div className="w-full max-w-sm bg-white rounded-xl shadow-md p-8 text-center flex flex-col items-center">
 
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                <h2 className="text-2xl font-bold text-gray-900 mb-1">
                     Membership QR Code
                 </h2>
+
                 <p className="text-gray-500 text-sm mb-6">
                     Present this code to be scanned
                 </p>
 
-
-                <div className="bg-gray-50 p-6 rounded-2xl shadow-inner mb-4">
+                {/* QR */}
+                <div className="bg-gray-50 p-6 rounded-2xl shadow-inner mb-2">
                     <QRCode value={link} size={180} />
                 </div>
 
-                <p className="text-xs text-gray-400 mt-2">
+                {/* User Info */}
+                <div className="w-full bg-gray-50 rounded-xl p-4 text-left space-y-2">
+                    <p className="text-xl text-center font-semibold text-gray-800">
+                        {user.name}
+                    </p>
+
+                    <div className="flex justify-between text-xs text-gray-500">
+                        <span>Created</span>
+                        <span>{new Date(user.createdAt).toLocaleString("en-US", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                        })}</span>
+                    </div>
+
+                    <div className="flex justify-between text-xs text-gray-500">
+                        <span>Expires</span>
+                        <span>{new Date(user.expiryDate).toLocaleString("en-US", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                        })}</span>
+                    </div>
+                </div>
+
+                <p className="text-xs text-gray-400 mt-4">
                     Valid for one-time use only
                 </p>
 

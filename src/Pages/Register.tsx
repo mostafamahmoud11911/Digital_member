@@ -44,9 +44,6 @@ export default function Register() {
                     <h1 className="text-2xl font-semibold text-gray-900">
                         Create your membership
                     </h1>
-                    <p className="text-gray-500 mt-1 text-sm">
-                        Generate your QR code in seconds
-                    </p>
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

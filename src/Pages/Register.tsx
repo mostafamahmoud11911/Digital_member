@@ -58,7 +58,7 @@ export default function Register() {
 
                         <input
                             type="text"
-                            placeholder="John Doe"
+                            placeholder="Enter your full name"
                             {...register("name")}
                             className={`w-full px-4 py-3 rounded-md border text-sm
             transition-all duration-200
